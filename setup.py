@@ -6,8 +6,8 @@ setup(
     version = '0.1',
     packages = find_packages(),
     author = 'Noe Nieto',
-    author_email = 'nnieto@noenieto.com'
+    author_email = 'nnieto@noenieto.com',
     license = 'MIT',
     url = 'http://github.io/tzicatl/compropago-python',
-    setup_requires=['nose>=1.0'],
+    tests_require = ['nose>=1.0', 'responses'],
 )
