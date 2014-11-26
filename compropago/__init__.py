@@ -11,7 +11,6 @@ class Cargo(object):
         customer_email = "noreply@compropago.com",
         payment_type = "OXXO"
     """
-
     def __init__(self, product_price, product_name, product_id, image_url, customer_name, customer_email, payment_type):
         self.product_price = product_price
         self.product_name = product_name
@@ -21,6 +20,16 @@ class Cargo(object):
         self.customer_email = customer_email
         self.payment_type = payment_type
 
+    def to_dict(self):
+        return {
+            'product_price': self.product_price,
+            'product_name': self.product_name,
+            'product_id': self.product_id,
+            'image_url': self.image_url,
+            'customer_name': self.customer_name,
+            'customer_email': self.customer_email,
+            'payment_type': self.payment_type
+        }
 
 class CompropagoAPI(object):
     errores = {
@@ -39,6 +48,8 @@ class CompropagoAPI(object):
         self.url_base = url_base
 
     def crear_cargo(self, cargo):
+        if not isinstance(cargo, Cargo):
+            raise TypeError('%s no es una instancia de Cargo.' % str(cargo))
         r = requests.post('/'.join(self.url_base, '/v1/charges'))
 
     def verificar_cargo(self, info):
