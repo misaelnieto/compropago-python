@@ -1,7 +1,7 @@
 #coding: utf-8
 import requests
 
-class Cargo(object):
+class Charge(object):
     """ 
         product_price = 10000.0,
         product_name = "SAMSUNG GOLD CURL",
@@ -43,17 +43,17 @@ class CompropagoAPI(object):
         6004: u'Número de celular no válido, probablemente el número contiene menos o más de 10 dígitos',
     }
 
-    def __init__(self, api_key, url_base='https://api.compropago.com'):
+    def __init__(self, api_key, url_base='https://api.compropago.com/v2'):
         self.api_key = api_key
         self.url_base = url_base
 
-    def crear_cargo(self, cargo):
-        if not isinstance(cargo, Cargo):
-            raise TypeError('%s no es una instancia de Cargo.' % str(cargo))
-        r = requests.post('/'.join(self.url_base, '/v1/charges'))
+    def charge(self, charge):
+        if not isinstance(charge, Charge):
+            raise TypeError('%s no es una instancia de Charge.' % str(charge))
+        r = requests.post('/'.join((self.url_base, 'charges')))
 
-    def verificar_cargo(self, info):
+    def verify_charge(self, info):
         pass
 
-    def enviar_sms(self, **kwargs):
+    def send_sms(self, **kwargs):
         pass        

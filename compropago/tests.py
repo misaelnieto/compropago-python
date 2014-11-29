@@ -1,10 +1,10 @@
+#coding: utf-8
 import requests
 import responses
-
+from compropago import CompropagoAPI, Charge
 
 def test_cargo_object():
-    from compropago import Cargo
-    c = Cargo(
+    c = Charge(
         product_price = 10000.0,
         product_name = "SAMSUNG GOLD CURL",
         product_id = "SMGCURL1",
@@ -15,18 +15,66 @@ def test_cargo_object():
     )
     assert isinstance(c.to_dict(), dict)
 
-def test_api_endpoint():
-    from compropago import CompropagoAPI
+def test_api_constructor():
     api = CompropagoAPI('My API Key')
-    assert(api.Endpoint== 'https://api.compropago.com/v2')
+    assert(api.api_key == 'My API Key')
+    assert(api.url_base == 'https://api.compropago.com/v2')
 
 @responses.activate
-def test_auth():
+def test_create_charge():
+    API_KEY = '687881193b2423'
+    api = CompropagoAPI(API_KEY)
+    responses.add(
+        responses.POST,
+        'https://api.compropago.com/v2/charges',
+        body = """
+        {
+         "payment_id": "c0991dd38-e408-4f27",
+         "short_payment_id": "00927c",
+         "payment_status": "PENDING",
+         "creation_date": "2013-09-30T04:46:04Z",
+         "expiration_date": "2013-10-01T04:46:04Z",
+         "product_information": {
+           "product_id": "IB18S",
+           "product_name": "Samsung Galaxy Gold",
+           "product_price": 10000.0,
+          }
+         "payment_instructions":{
+           "description": "Para que el 
+             pago sea valido debes pagar ...",
+           "step_1": "Ir a la caja OXXO ...",
+           "step_2": "Solicitar deposito ...",
+           "step_3": "Deposite la cantidad ...",
+           "note_extra_comition": "Las tiendas OXXO 
+             cobran en caja una comisión de 7 pesos",
+           "note_expiration_date": "Orden válida 
+             antes de 01/10/2013",
+           "note_confirmation": "Tu pago será 
+             confirmado a través de SMS y email",
+          }
+        }
+          """,
+        content_type='application/json')
+    c = Charge(
+        product_price = 10000.0,
+        product_name = "SAMSUNG GOLD CURL",
+        product_id = "SMGCURL1",
+        image_url = "https =//test.amazon.com/5f4373",
+        customer_name = "Alejandra Leyva",
+        customer_email = "noreply@compropago.com",
+        payment_type = "OXXO"
+    )
+    resp = api.charge(c)
+    assert len(responses.calls) == 1
+
+
+@responses.activate
+def test_get_charge():
     from compropago import CompropagoAPI
     API_KEY = '687881193b2423'
-    api = API(API_KEY)
+    api = CompropagoAPI(API_KEY)
     responses.add(
-        RESPONSES.GET,
+        responses.GET,
         'https://api.compropago.com/v1/charges/c90870de-55a2-4b50-bd6b-9c7887787b35',
         body = """
           {
@@ -73,4 +121,4 @@ def test_auth():
             }
           }
           """)
-    resp = api.verificar_cargo
+    resp = api.verify_charge
