@@ -71,19 +71,19 @@ class CompropagoTestCharge(unittest.TestCase):
         assert len(responses.calls) == 1
 
     @responses.activate
-    def test_get_charge(self):
+    def test_verify_charge(self):
         from compropago import CompropagoAPI
         API_KEY = '687881193b2423'
         api = CompropagoAPI(API_KEY)
         responses.add(
             responses.GET,
-            'https://api.compropago.com/v1/charges/c90870de-55a2-4b50-bd6b-9c7887787b35',
+            'https://api.compropago.com/v2/charges/c90870de-55a2-4b50-bd6b-9c7887787b35',
             body = """
               {
                 "type":"charge.pending",
                 "object":"event",
                 "data": {
-                  "object": {
+                   "object": {
                     "id": "fe92a1a5-abec-49e3-877c-5024c1464dc3",
                     "object": "charge",
                     "created_at": "2013-12-09T18:59:28.048Z",
@@ -124,4 +124,28 @@ class CompropagoTestCharge(unittest.TestCase):
               }
               """)
         resp = api.verify_charge('c90870de-55a2-4b50-bd6b-9c7887787b35')
+        assert len(responses.calls) == 1
+
+
+class TestSMS(unittest.TestCase):
+    @responses.activate
+    def test_send_sms(self):
+        API_KEY = '687881193b2423'
+        api = CompropagoAPI(API_KEY)
+        responses.add(
+            responses.GET,
+            'https://api.compropago.com/v2/charges/c90870de-55a2-4b50-bd6b-9c7887787b35',
+            body = """{
+               "type": "charge_sms.success",
+               "object": "event",
+               "payment": {
+                 "id": "f4172ff7-9125-4206-99c7-151480",
+                 "short_id": "04c651",
+                }
+              }""")
+        resp = api.send_sms(
+            payment_id = 'f4172ff7-9125-4206-99c7-151480b036ad',
+            phone = '2221515805',
+            company = 'TELCEL'
+        )
         assert len(responses.calls) == 1

@@ -1,5 +1,10 @@
 #coding: utf-8
+import json
+
 import requests
+from requests.auth import HTTPBasicAuth
+
+from .exceptions import *
 
 class Charge(object):
     """ 
@@ -11,6 +16,7 @@ class Charge(object):
         customer_email = "noreply@compropago.com",
         payment_type = "OXXO"
     """
+
     def __init__(self, product_price, product_name, product_id, image_url, customer_name, customer_email, payment_type):
         self.product_price = product_price
         self.product_name = product_name
@@ -31,6 +37,7 @@ class Charge(object):
             'payment_type': self.payment_type
         }
 
+
 class CompropagoAPI(object):
     errores = {
         4001: u'Llave no encontrada',
@@ -47,13 +54,46 @@ class CompropagoAPI(object):
         self.api_key = api_key
         self.url_base = url_base
 
+    @property
+    def auth(self):
+        return HTTPBasicAuth(self.api_key, '')
+
+    @property
+    def headers(self):
+        return {
+            'Content-Type': 'application/json',
+        }
+    
     def charge(self, charge):
         if not isinstance(charge, Charge):
             raise TypeError('%s no es una instancia de Charge.' % str(charge))
-        r = requests.post('/'.join((self.url_base, 'charges')))
+        r = requests.post(
+            '/'.join((self.url_base, 'charges')),
+            data = charge.to_dict(),
+            auth = HTTPBasicAuth(self.api_key, '')
+        )
 
-    def verify_charge(self, info):
-        pass
+    def verify_charge(self, payment_id):
+        return requests.get(
+            '/'.join((self.url_base, 'charges', payment_id)),
+            auth = self.auth,
+            headers = self.headers
+        )
 
-    def send_sms(self, **kwargs):
-        pass        
+    def send_sms(self, payment_id, phone, company):
+        """
+        Ofrece a tus usuarios la posibilidad de recibir las instrucciones de pago
+        directo en su telefono celular. Los unicos campos requeridos son el numero
+        de celular y su compania telefonica.
+        """
+        if company.upper() not in ('TELCEL' 'MOVISTAR' 'IUSACELL' 'NEXTEL'):
+            raise WrongPhoneCompanyError(
+                'Las unicas companias soportadas son TELCEL, IUSACELL y MOVISTAR y NEXTEL'
+            )
+        payload = json.dumps({'customer_phone': phone, 'customer_company_phone': company})
+        return requests.post(
+            '/'.join((self.url_base, 'charges', payment_id, 'sms')),
+            data = payload,
+            auth = self.auth,
+            headers = self.headers
+        )
