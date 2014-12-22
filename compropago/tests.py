@@ -10,6 +10,7 @@ class APITestCase(unittest.TestCase):
         assert(api.api_key == 'My API Key')
         assert(api.url_base == 'https://api.compropago.com/v2')
 
+
 class CompropagoTestCharge(unittest.TestCase):
     def test_cargo_object(self):
         c = Charge(
@@ -133,8 +134,8 @@ class TestSMS(unittest.TestCase):
         API_KEY = '687881193b2423'
         api = CompropagoAPI(API_KEY)
         responses.add(
-            responses.GET,
-            'https://api.compropago.com/v2/charges/c90870de-55a2-4b50-bd6b-9c7887787b35',
+            responses.POST,
+            'https://api.compropago.com/v2/charges/f4172ff7-9125-4206-99c7-151480b036ad/sms',
             body = """{
                "type": "charge_sms.success",
                "object": "event",
