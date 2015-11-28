@@ -9,5 +9,6 @@ setup(
     author_email = 'nnieto@noenieto.com',
     license = 'MIT',
     url = 'http://github.io/tzicatl/compropago-python',
+    install_requires = ['requests',],
     tests_require = ['nose>=1.0', 'responses'],
 )

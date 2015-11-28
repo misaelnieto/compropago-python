@@ -44,8 +44,7 @@ class CompropagoTestCharge(unittest.TestCase):
                "product_price": 10000.0,
               }
              "payment_instructions":{
-               "description": "Para que el 
-                 pago sea valido debes pagar ...",
+               "description": "Para que el pago sea valido debes pagar ...",
                "step_1": "Ir a la caja OXXO ...",
                "step_2": "Solicitar deposito ...",
                "step_3": "Deposite la cantidad ...",
@@ -57,8 +56,9 @@ class CompropagoTestCharge(unittest.TestCase):
                  confirmado a través de SMS y email",
               }
             }
-              """,
-            content_type='application/json')
+            """,
+            content_type='application/json'
+        )
         c = Charge(
             product_price = 10000.0,
             product_name = "SAMSUNG GOLD CURL",

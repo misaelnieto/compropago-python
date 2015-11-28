@@ -4,23 +4,23 @@ import json
 import requests
 from requests.auth import HTTPBasicAuth
 
-from .exceptions import *
+from .exceptions import WrongPhoneCompanyError
 
-class Charge(object):
-    """ 
-        product_price = 10000.0,
-        product_name = "SAMSUNG GOLD CURL",
-        product_id = "SMGCURL1",
+class CompropagoCharge(object):
+    """
+        order_id = "SMGCURL1",
+        order_price = 10000.0,
+        order_name = "SAMSUNG GOLD CURL",
         image_url = "https =//test.amazon.com/5f4373",
         customer_name = "Alejandra Leyva",
         customer_email = "noreply@compropago.com",
         payment_type = "OXXO"
     """
 
-    def __init__(self, product_price, product_name, product_id, image_url, customer_name, customer_email, payment_type):
-        self.product_price = product_price
-        self.product_name = product_name
-        self.product_id = product_id
+    def __init__(self, order_id, order_price, order_name, image_url, customer_name, customer_email, payment_type):
+        self.order_id = order_id
+        self.order_price = order_price
+        self.order_name = order_name
         self.image_url = image_url
         self.customer_name = customer_name
         self.customer_email = customer_email
@@ -28,9 +28,9 @@ class Charge(object):
 
     def to_dict(self):
         return {
-            'product_price': self.product_price,
-            'product_name': self.product_name,
-            'product_id': self.product_id,
+            'order_id': self.order_id,
+            'order_price': self.order_price,
+            'order_name': self.order_name,
             'image_url': self.image_url,
             'customer_name': self.customer_name,
             'customer_email': self.customer_email,
@@ -50,35 +50,38 @@ class CompropagoAPI(object):
         6004: u'Número de celular no válido, probablemente el número contiene menos o más de 10 dígitos',
     }
 
-    def __init__(self, api_key, url_base='https://api.compropago.com/v2'):
+    def __init__(self, api_key, url_base='https://api.compropago.com/v1'):
         self.api_key = api_key
         self.url_base = url_base
 
     @property
     def auth(self):
-        return HTTPBasicAuth(self.api_key, '')
+        return (self.api_key, '')
 
     @property
     def headers(self):
         return {
+            'Accept': 'application/compropago',
             'Content-Type': 'application/json',
+            'User-Agent': 'Django LFS - http://www.getlfs.com/'
         }
-    
+
     def charge(self, charge):
-        if not isinstance(charge, Charge):
-            raise TypeError('%s no es una instancia de Charge.' % str(charge))
-        r = requests.post(
+        if not isinstance(charge, CompropagoCharge):
+            raise TypeError('%s no es una instancia de CompropagoCharge.' % str(charge))
+        return requests.post(
             '/'.join((self.url_base, 'charges')),
-            data = charge.to_dict(),
-            auth = HTTPBasicAuth(self.api_key, '')
-        )
+            headers = self.headers,
+            json = charge.to_dict(),
+            auth = self.auth
+        ).json()
 
     def verify_charge(self, payment_id):
         return requests.get(
             '/'.join((self.url_base, 'charges', payment_id)),
             auth = self.auth,
             headers = self.headers
-        )
+        ).json()
 
     def send_sms(self, payment_id, phone, company):
         """
@@ -96,4 +99,4 @@ class CompropagoAPI(object):
             data = payload,
             auth = self.auth,
             headers = self.headers
-        )
+        ).json()
