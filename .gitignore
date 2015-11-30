@@ -1,3 +1,5 @@
 *egg*
 *.pyc
 *.pyo
+build/
+dist/

@@ -1,5 +1,5 @@
-compropago-python
-=================
+Compropago en Python
+====================
 
 This is the Python library for ComproPago (https://compropago.com/), a Mexican
 payment gateway.

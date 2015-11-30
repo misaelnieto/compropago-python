@@ -9,7 +9,7 @@ from os import path
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README.rst file
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+with open(path.join(here, 'README.rst')) as f:
     long_description = f.read()
 
 setup(
@@ -37,6 +37,6 @@ setup(
     keywords='ecommerce e-commerce payment development mexico',
     install_requires = ['requests',],
     extras_require ={
-        'dev' ['nose>=1.0', 'responses'],
+        'dev': ['nose>=1.0', 'responses'],
     }
 )
