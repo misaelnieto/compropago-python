@@ -35,13 +35,6 @@ añadir ``compropago-python`` a la sección ``eggs``::
 Instalación en modo desarrollo
 ------------------------------
 
-En Linux
-~~~~~~~~
-
-Nota: En mac deberia funcionar de manera
-parecida, pero como no tengo mac no te
-puedo saber con certeza.
-
 Debes de tener instalado pip y de preferencia virtualenv y virtualenvwrapper.
 
 .. code-block:: bash
@@ -66,35 +59,69 @@ Después de instalar Python hay que instalar pip con `get-pip.py
 <https://bootstrap.pypa.io/get-pip.py>`_. [1]_
 
 .. code-block:: msdos
-
     C:\Tools\Python2\python.exe get-pip.py
 
 Despues puedes instalar virtualenv y crear tu entorno virtual.
 
 .. code-block:: msdos
-
     C:\Tools\Python2\Scripts\pip.exe install virtualenv
     CD C:\Code\MyProject
     C:\Tools\Python2\Scripts\mkvirtualenv.exe ve
     ve\Scripts\activate.exe
 
-Finalmente 
+Finalmente:
+
+.. code-block:: msdos
     cd compropago-python
     ..\ve\Scripts\python.exe setup.py develop
     ..\ve\Scripts\nosetests.exe
 
 
-Autenticación
--------------
+¿Cómo crear un cargo?
+---------------------
 
-Crear un cargo
---------------
+Para cualquier operación con el API de Compropago tendrás que usar la llave pública que puedes obtener en el panel de Control de Compropago.
+
+.. code-block:: python
+    from compropago import CompropagoAPI, CompropagoCharge
+    COMPROPAGO_PUBLIC_API_KEY = '687881193b2423'
+    api = CompropagoAPI(COMPROPAGO_PUBLIC_API_KEY)
+    c = CompropagoCharge(
+        order_id = '1', # De preferencia un numero consecutivo asociado a una orden de compra
+        order_price = '10.59', #Compropago solo maneja pesos
+        order_name = 'La tiendita de la esquina',
+        image_url = 'https://getfedora.org/static/images/fedora_infinity_140x140.png',
+        customer_name = 'Fulano Fernandes',
+        customer_email = perengano@perez.com,
+        payment_type = 'OXXO'
+    )
+    r = api.charge(c)
+
+Los tipos de pagos soportados por `payment_type` son::
+
+    OXXO
+    SEVEN_ELEVEN
+    EXTRA
+    CHEDRAUI
+    ELEKTRA
+    COPPEL
+    FARMACIA_BENAVIDES
+    FARMACIA_ESQUIVAR
+
 
 Verificar un cargo existente
 ----------------------------
 
-Enviar instrucciones mediante SMS
----------------------------------
+Necesitaras el id del pago creado en el paso anterior.
+
+.. code-block:: python
+    from compropago impo    rt CompropagoAPI
+    COMPROPAGO_PUBLIC_API_KEY = '687881193b2423'
+    api = CompropagoAPI(COMPROPAGO_PUBLIC_API_KEY)
+    payment_id = '123234' # Viniendo de alguna pa
+    res = api.verify_charge(pay_id)
+    if res['object'] == 'event' and res['type'] == 'charge.success':
+        print "Pagado"
 
 Errores
 --------
