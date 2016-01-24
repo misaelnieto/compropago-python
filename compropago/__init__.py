@@ -2,7 +2,6 @@
 import json
 
 import requests
-from requests.auth import HTTPBasicAuth
 
 from .exceptions import WrongPhoneCompanyError
 
@@ -11,30 +10,36 @@ class CompropagoCharge(object):
         order_id = "SMGCURL1",
         order_price = 10000.0,
         order_name = "SAMSUNG GOLD CURL",
-        image_url = "https =//test.amazon.com/5f4373",
         customer_name = "Alejandra Leyva",
         customer_email = "noreply@compropago.com",
         payment_type = "OXXO"
     """
 
-    def __init__(self, order_id, order_price, order_name, image_url, customer_name, customer_email, payment_type):
+    def __init__(self, order_id, order_price, order_name, customer_name, customer_email, payment_type):
         self.order_id = order_id
         self.order_price = order_price
         self.order_name = order_name
-        self.image_url = image_url
         self.customer_name = customer_name
         self.customer_email = customer_email
         self.payment_type = payment_type
+        # Last update to CP API expects data with these names
+        self.product_id = order_id
+        self.product_price = order_price
+        self.product_name = order_name
+
 
     def to_dict(self):
         return {
             'order_id': self.order_id,
             'order_price': self.order_price,
             'order_name': self.order_name,
-            'image_url': self.image_url,
             'customer_name': self.customer_name,
             'customer_email': self.customer_email,
-            'payment_type': self.payment_type
+            'payment_type': self.payment_type,
+            #Compatibility for new API changes (Jun 16, 2015)
+            'product_id': self.product_id,
+            'product_price': self.product_price,
+            'product_name': self.product_name,
         }
 
 

@@ -90,12 +90,15 @@ Para cualquier operación con el API de Compropago tendrás que usar la llave p�
         order_id = '1', # De preferencia un numero consecutivo asociado a una orden de compra
         order_price = '10.59', #Compropago solo maneja pesos
         order_name = 'La tiendita de la esquina',
-        image_url = 'https://getfedora.org/static/images/fedora_infinity_140x140.png',
         customer_name = 'Fulano Fernandes',
         customer_email = perengano@perez.com,
         payment_type = 'OXXO'
     )
     r = api.charge(c)
+
+Nota: Hay dos versiones del API: 1.0 y 1.1. Las dos versiones difieren bastante. 
+Si Compropago falla diciendo que la llave es invalida, prueba con la otra llave
+que te dan el panel de control.
 
 Los tipos de pagos soportados por `payment_type` son::
 
@@ -136,4 +139,5 @@ Código  Descripción
 6002    Se ha superado el número de envios SMS, máximo 2 mensajes por orden de pago
 6003    Compañia celular inválida, soportamos: TELCEL, MOVISTAR, IUSACELL, UNEFON y NEXTEL
 6004    Número de celular no válido, probablemente el número contiene menos o más de 10 dígitos
+
 

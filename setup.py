@@ -14,7 +14,7 @@ with open(path.join(here, 'README.rst')) as f:
 
 setup(
     name = 'compropago-python',
-    version = '0.1',
+    version = '0.2',
     description = 'Python library for ComproPago',
     long_description = long_description,
     url = 'http://github.io/tzicatl/compropago-python',
@@ -32,7 +32,6 @@ setup(
         'Natural Language :: Spanish',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 2.7',
-        'Topic :: Software Development :: Interpreters',
     ],
     keywords='ecommerce e-commerce payment development mexico',
     install_requires = ['requests',],
