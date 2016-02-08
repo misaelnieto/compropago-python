@@ -14,7 +14,7 @@ with open(path.join(here, 'README.rst')) as f:
 
 setup(
     name = 'compropago-python',
-    version = '0.2',
+    version = '0.3',
     description = 'Python library for ComproPago',
     long_description = long_description,
     url = 'http://github.io/tzicatl/compropago-python',

@@ -84,8 +84,8 @@ Para cualquier operación con el API de Compropago tendrás que usar la llave p�
 
 .. code-block:: python
     from compropago import CompropagoAPI, CompropagoCharge
-    COMPROPAGO_PUBLIC_API_KEY = '687881193b2423'
-    api = CompropagoAPI(COMPROPAGO_PUBLIC_API_KEY)
+    COMPROPAGO_PRIVATE_API_KEY = '687881193b2423'
+    api = CompropagoAPI(api_key=COMPROPAGO_PRIVATE_API_KEY)
     c = CompropagoCharge(
         order_id = '1', # De preferencia un numero consecutivo asociado a una orden de compra
         order_price = '10.59', #Compropago solo maneja pesos
@@ -119,8 +119,8 @@ Necesitaras el id del pago creado en el paso anterior.
 
 .. code-block:: python
     from compropago impo    rt CompropagoAPI
-    COMPROPAGO_PUBLIC_API_KEY = '687881193b2423'
-    api = CompropagoAPI(COMPROPAGO_PUBLIC_API_KEY)
+    COMPROPAGO_PRIVATE_API_KEY = '687881193b2423'
+    api = CompropagoAPI(COMPROPAGO_PRIVATE_API_KEY)
     payment_id = '123234' # Viniendo de alguna pa
     res = api.verify_charge(pay_id)
     if res['object'] == 'event' and res['type'] == 'charge.success':
