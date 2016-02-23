@@ -1,7 +1,7 @@
 
 """Python package for the ComproPago API
 See:
-https://github.com/tzicatl/compropago-python
+https://github.com/misaelnieto/compropago-python
 """
 from setuptools import setup, find_packages
 from os import path
@@ -17,7 +17,7 @@ setup(
     version = '0.3',
     description = 'Python library for ComproPago',
     long_description = long_description,
-    url = 'http://github.io/tzicatl/compropago-python',
+    url = 'https://github.com/misaelnieto/compropago-python',
     author = 'Noe Nieto',
     author_email = 'nnieto@noenieto.com',
     packages = find_packages(),
